@@ -1,0 +1,27 @@
+name: Build C3 SuperMini E220
+on:
+  push:
+    paths:
+      - '.github/workflows/build_my_c3.yml'
+      - 'variants/esp32c3/c3_supermini_e220/**'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install PlatformIO
+        run: pip install -U platformio
+      - name: Build firmware
+        run: pio run -e c3_supermini_e220
+      - name: Upload firmware
+        uses: actions/upload-artifact@v4
+        with:
+          name: firmware-c3_supermini_e220
+          path: .pio/build/c3_supermini_e220/*.bin
