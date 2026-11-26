@@ -15,9 +15,9 @@ jobs:
           submodules: recursive
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: '3.10'
       - name: Install PlatformIO
-        run: pip install -U platformio
+        run: pip install -U platformio "scons<4.8"
       - name: Build firmware
         run: pio run -e c3_supermini_e220
       - name: Upload firmware
