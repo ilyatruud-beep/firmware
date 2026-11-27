@@ -19,7 +19,7 @@ jobs:
       - name: Install PlatformIO
         run: |
           pip install -U platformio
-          python -c "import platformio, pathlib; p = pathlib.Path(platformio.__file__); p.write_text(p.read_text().replace('6.2.0-post.1', '6.2.1'))"
+          python -c "import site, pathlib; [p.write_text(p.read_text().replace('6.2.0-post.1', '6.2.1')) for d in site.getsitepackages() for p in pathlib.Path(d).rglob('*') if p.is_file() and p.suffix in ('.py', '.txt', '') and '6.2.0-post.1' in p.read_text(errors='ignore')]"
       - name: Build firmware
         run: pio run -e c3_supermini_e220
       - name: Upload firmware
