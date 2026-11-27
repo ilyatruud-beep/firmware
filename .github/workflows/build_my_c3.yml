@@ -19,9 +19,13 @@ jobs:
       - name: Install PlatformIO
         run: |
           pip install -U platformio
-          python -c "import site, pathlib; [p.write_text(p.read_text().replace('6.2.0-post.1', '6.2.1')) for d in site.getsitepackages() for p in pathlib.Path(d).rglob('*') if p.is_file() and p.suffix in ('.py', '.txt', '') and '6.2.0-post.1' in p.read_text(errors='ignore')]"
+          find / -name "version.py" -path "*platformio*" -exec sed -i 's/6\.2\.0-post\.1/6.2.1/g' {} + 2>/dev/null || true
+          find / -name "METADATA" -path "*platformio*" -exec sed -i 's/6\.2\.0-post\.1/6.2.1/g' {} + 2>/dev/null || true
       - name: Build firmware
-        run: pio run -e c3_supermini_e220
+        run: |
+          pio pkg install -g -p "https://github.com" || true
+          find ~/.platformio -name "platform.json" -exec sed -i 's/>=6\.2\.0/>=6.0.0/g' {} + 2>/dev/null || true
+          pio run -e c3_supermini_e220
       - name: Upload firmware
         uses: actions/upload-artifact@v4
         with:
